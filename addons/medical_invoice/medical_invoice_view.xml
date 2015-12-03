@@ -1,0 +1,247 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+
+	<!-- Patient details -->
+		
+		<record model="ir.ui.view" id="medical_patient_view_referance_source">
+			<field name="name">Patient</field>
+			<field name="model">medical.patient</field>
+			<field name="inherit_id" ref="medical.medical_patient_hc_view"/>
+			<field name="arch" type="xml">
+				<field name="insurances" position="after">
+					<field name="receivable" invisible="True"/>
+				</field>
+			</field>
+		</record>
+
+
+	<!-- Appointment details -->
+		
+		<record model="ir.ui.view" id="medical_invoice_appointment_view">
+			<field name="name">Appointment</field>
+			<field name="model">medical.appointment</field>
+			<field name="inherit_id" ref="medical.medical_appointment_view"/>
+			<field name="arch" type="xml">
+				<field name="speciality" position="after">
+                    <field name="consultations" select="2" colspan="3" readonly="1" required="1" send="1"/>
+                    <newline/>
+                    <field name="no_invoice" colspan="3" attrs="{'invisible':[('public', '=', True)], 'readonly': [('state', 'in', ['open', 'done', 'losed', 'invoiced'])]}"/>
+					<newline/>
+                    <field name="public" invisible="1"/>
+				</field>
+                <button name="attend" position="after">
+                    <button type="object" name="open_sale_order" string="Sale Order" states="waiting,open,consult,done,invoiced" icon="terp-stock_format-default"/>
+                </button>
+			</field>
+		</record>	
+
+		<record model="ir.ui.view" id="medical_prescription_invoice_view">
+			<field name="name">Prescription</field>
+			<field name="model">medical.prescription.order</field>
+			<field name="inherit_id" ref="medical.medical_prescription_view"/>
+			<field name="arch" type="xml">
+				<field name="pharmacy" position="after">
+					<newline/>
+					<field name="no_invoice"/>
+				</field>
+			</field>
+		</record>
+        
+        <record id="medical_journal_form_view" model="ir.ui.view">
+            <field name="name">Professional Journal</field>
+            <field name="model">account.journal</field>
+            <field name="arch" type="xml">
+                <form string="Account Journal">
+                    <div class="oe_title oe_left">
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1><field name="name"/></h1>
+                        </div>
+                    </div>
+                    <div class="oe_right oe_button_box" name="buttons" groups="medical_install.group_medical_admin">
+                        <button string="Invoice" class="oe_inline oe_stat_button" type="action" name="%(action_open_view_move_line_to_invoice_form)d" icon="fa-strikethrough" context="{'invoice_type': 'all'}">
+                            <field string="All" name="all_count" widget="statinfo"/>
+                        </button>
+                        <button string="Invoice" class="oe_inline oe_stat_button" type="action" name="%(action_open_view_move_line_to_invoice_form)d" icon="fa-strikethrough" context="{'invoice_type': 'paid'}">
+                            <field string="Paid" name="paid_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="type"/>
+                        </group>
+                        <group>
+                            <field name="default_debit_account_id" attrs="{'required':[('type','in', ('cash', 'bank'))]}" domain="[('type','&lt;&gt;','view'),('type','&lt;&gt;','consolidation')]"/>
+                            <field name="default_credit_account_id" attrs="{'required':[('type','in',('cash', 'bank'))]}" domain="[('type','&lt;&gt;','view'),('type','&lt;&gt;','consolidation')]"/>
+                            <field name="currency" groups="base.group_multi_currency"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Entries">
+                            <field name="entry_ids" nolabel="1" readonly="1"/>
+                        </page>
+                        <page string="Settings">
+                            <group string="Advanced ">
+                                <group>
+                                    <field name="user_id" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'account.group_account_user']}"/>
+                                    <field name="sequence_id" required="0"/>
+                                </group>
+                                <group>
+                                    <field name="centralisation"/>
+                                    <field name="entry_posted"/>
+                                    <field name="allow_date"/>
+                                    <field name="group_invoice_lines"/>
+                                </group>
+                            </group>
+                            <group string="Entry Controls">
+                                <separator colspan="4" string="Accounts Type Allowed (empty for no control)"/>
+                                <field colspan="4" name="type_control_ids" nolabel="1"/>
+                                <separator colspan="4" string="Accounts Allowed (empty for no control)"/>
+                                <field colspan="4" name="account_control_ids" nolabel="1"/>
+                            </group>
+                            <group string="Cash Registers">
+                                <group>
+                                    <group string="Accounts">
+                                        <field name="profit_account_id" domain="[('type','!=','view')]"/>
+                                        <field name="loss_account_id" domain="[('type','!=','view')]"/>
+                                        <field name="internal_account_id" domain="[('type','!=','view')]"/>
+                                    </group>
+                                    <group string="Miscellaneous">
+                                        <field name="with_last_closing_balance" attrs="{'invisible': [('type', 'not in', ['bank', 'cash'])]}"/>
+                                        <field name="cash_control" attrs="{'invisible':[('type','not in', ('cash',))]}"/>
+                                    </group>
+                                </group>
+                                <separator string="Available Coins" colspan="4" attrs="{'invisible' : ['|',('cash_control', '=', False),('type','not in', ('cash',))] }"/>
+                                <field name="cashbox_line_ids" nolabel="1" string="Unit Of Currency Definition" colspan="4" attrs="{'invisible' : ['|',('cash_control', '=', False),('type','not in', ('cash',))]}">
+                                    <tree string="CashBox Lines" editable="bottom">
+                                        <field name="pieces" />
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+        
+        <record id="medical_journal_action" model="ir.actions.act_window">
+            <field name="name">Professional Journal</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.journal</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="medical_journal_form_view"></field>
+        </record>
+        
+        <record id="view_account_move_line_tree" model="ir.ui.view">
+            <field name="name">account.move.line</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="credit" position="after">
+                    <field name="commision_amount" sum="Total Commision"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_account_move_tree" model="ir.ui.view">
+            <field name="name">account.move</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_account_move_tree"/>
+            <field name="arch" type="xml">
+                <field name="amount" position="after">
+                    <field name="commision_amount" sum="Total Commision"/>
+                </field>
+            </field>
+        </record>
+        
+        
+    <!-- medical.physician-->
+        <record id="view_medical_pphysician_form" model="ir.ui.view">
+            <field name="name">medical.physician.form</field>
+            <field name="model">medical.physician</field>
+            <field name="inherit_id" ref="medical.medical_physician_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='info']" position="before">
+                    <field name="pricelist_ids"/>
+                </xpath>
+                <xpath expr="//div[@name='buttons']" position="inside">
+                    <field name="journal_id" invisible="1"/>
+                    <button string="Journal" class="oe_inline oe_stat_button" type="object" name="open_journal_action" icon="fa-strikethrough" context="{'res_id': journal_id}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--sale.order-->
+        <record model="ir.ui.view" id="medical_sale_pricelist_view">
+            <field name="name">sale.order.pricelist.doctor</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="pricelist_id" position="before">
+                        <field name="doctor_pricelist_ids" invisible="1" widget="char"/>
+                    </field>
+                    <field name="pricelist_id" position="attributes">
+                        <attribute name="context">{'search_doctor_pricelists': doctor_pricelist_ids}</attribute>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="view_order_form_one_tax" model="ir.ui.view">
+            <field name="name">sale.order.form.one.tax</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="attributes">
+                    <attribute name="widget">many2one</attribute>
+                </xpath>
+            </field>
+        </record>
+        
+        
+        <record id="seq_medical_journal_type" model="ir.sequence.type">
+            <field name="name">Medical Journal</field>
+            <field name="code">medical.journal</field>
+        </record>
+        
+        <record id="seq_medical_journal" model="ir.sequence">
+            <field name="name">Medical Journal</field>
+            <field name="code">medical.journal</field>
+            <field name="padding">4</field>
+            <field name="number_increment" eval="1"/>
+        </record>
+        
+        <record model="ir.ui.view" id="view_product_template_form_commision">
+            <field name="name">product.categ.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='sale_condition']" position="inside">
+                    <label for="commision"/>
+                    <div>
+                        <field name="commision" class="oe_inline"/> percent
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_product_form_commision">
+            <field name="name">product.normal.form.commision</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+               <xpath expr="//group[@name='sale_condition']" position="inside">
+                    <label for="commision"/>
+                    <div>
+                        <field name="commision" class="oe_inline"/> percent
+                    </div>
+                </xpath>
+            </field>
+        </record>
+	</data>
+</openerp>

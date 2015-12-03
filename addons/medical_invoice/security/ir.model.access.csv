@@ -1,0 +1,7 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_med_group_sale_order","sale.order","sale.model_sale_order","medical.group_medical_user",1,1,1,1
+"access_doctor_sale_order","sale.order","sale.model_sale_order","medical.group_medical_doctor",1,1,1,1
+"access_central_sale_order","sale.order","sale.model_sale_order","medical.group_appointment_central_user",1,1,1,1
+"access_med_group_sale_order_line","sale.order","sale.model_sale_order_line","medical.group_medical_user",1,1,1,1
+"access_doctor_sale_order_line","sale.order","sale.model_sale_order_line","medical.group_medical_doctor",1,1,1,1
+"access_central_sale_order_line","sale.order","sale.model_sale_order_line","medical.group_appointment_central_user",1,1,1,1

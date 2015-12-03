@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_move_line_to_invoice_form" model="ir.ui.view">
+            <field name="name">view.move.line.to.invoice.form</field>
+            <field name="model">move.line.to.invoice</field>
+            <field name="arch" type="xml">
+                <form string="Move Lines to invoice">
+                        <label string="Will you like to continue and create an Invoice for all pendings?"
+                               invisible="context.get('invoice_type', 'all') != 'all'"/>
+                        <label string="Will you like to continue and create an Invoice for all the paids pendings?"
+                               invisible="context.get('invoice_type', 'all') == 'all'"/>
+                        <newline/>
+                    <group>
+                        <div>
+                            <field name="select_lines" nolabel="1" class="oe_inline"/>
+                            <label for="select_lines"/>
+                        </div>
+                        <newline/>
+                        <field name="move_lines" nolabel="1" attrs="{'invisible': [('select_lines','!=', True)]}">
+                            <tree colors="red:state == 'draft';black:state == 'valid'" create="false" edit="false" on_write="on_create_write">
+                                <field name="period_id" options='{"no_open":True}'/>
+                                <field name="date"/>
+                                <field name="name"/>
+                                <field name="ref"/>
+                                <field name="partner_id" options='{"no_open":True}'/>
+                                <field name="account_id" options='{"no_open":True}'/>
+                                <field name="move_id" required="0"/>
+                                <field name="state"/>
+                                <field name="debit" sum="Total Debit"/>
+                                <field name="credit" sum="Total Credit"/>
+                                <field name="commision_amount" sum="Total Commision"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <button name="generate_invoices" type="object" string="Generate Invoices" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_open_view_move_line_to_invoice_form">
+            <field name="name">Move Lines to invoice</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">move.line.to.invoice</field>
+            <field name="target">new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_sale_order_line_make_invoice_co_payment" model="ir.ui.view">
+            <field name="name">Sales OrderLine Make Invoice Co payment</field>
+            <field name="model">sale.order.line.make.invoice</field>
+            <field name="inherit_id" ref="sale.view_sale_order_line_make_invoice"/>
+            <field name="arch" type="xml">
+                <xpath expr="//footer" position="before">
+                    <group>
+                        <field name="co_payment_able" invisible="1"/>
+                        <field name="patient" invisible="1"/>
+                        <field name="co_payment_method" attrs="{'invisible': ['|', ('co_payment_able','!=', True)]}"/>
+                        <field name="insurance" attrs="{'invisible': [('co_payment_able','=', False)], 'required': [('co_payment_able','=', True)]}" domain="[('patient_id','=', patient)]" options="{'no_create': True}"/>
+                        <field name="lines" attrs="{'invisible': [('co_payment_method','!=', 1)]}" create="0" delete="0">
+                            <tree create="false" delete="false" editable="bottom">
+                                <field name="order_line" readonly="1"/>
+                                <field name="patient_amount" required="1"/>
+                                <field name="insurance_amount" required="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>
