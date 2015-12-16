@@ -7,7 +7,9 @@
     'author': 'aekroft@gmail.com',
     'website': 'www.soltein.org',
     'depends': ['base', 'web', 'website'],
-    'data': [],
+    'data': [
+        'views/templates.xml'
+    ],
     'active': False,
     'installable': True,
 }

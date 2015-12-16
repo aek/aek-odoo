@@ -70,7 +70,9 @@ class table_compute(object):
                 for x2 in range(x):
                     self.table[(pos/PPR)+y2][(pos%PPR)+x2] = False
             self.table[pos/PPR][pos%PPR] = {
-                'elem': p, 'x':x, 'y': y,
+                'product': p,
+                'elem': p,
+                'x':x, 'y': y,
                 'class': " "#.join(map(lambda x: x.html_class or '', p.website_style_ids or []))
             }
             if index<=PPG:
@@ -102,7 +104,7 @@ class WebsiteProducts(orm.AbstractModel):
         domain = []
         if options.get('domain', False):
             domain += options.get('domain')
-        template = options.get('template')
+        template = options.get('template', 'solt_qweb_widgets.website_products')
         product_obj = self.pool.get('product.template')
 
         url = "/shop"
@@ -244,7 +246,7 @@ class WebsitePartners(orm.AbstractModel):
         domain = []
         if options.get('domain', False):
             domain += options.get('domain')
-        template = options.get('template')
+        template = options.get('template', 'solt_qweb_widgets.website_partners')
         partner_obj = self.pool.get('res.partner')
 
         url = "/partners"
