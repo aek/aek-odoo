@@ -49,11 +49,11 @@
                                 <span t-field="invoice.date_due"/>
                             </td>
                             <td class="text-center" t-foreach="invoice_timeframes(invoice)" t-as="frame_value">
-                                <t t-if="frame_value[1] == False">
-                                    <span t-esc="formatLang(frame_value[0])"/>
+                                <t t-if="frame_value[1] == False or frame_value[0] == 0.0">
+                                    <span t-esc="formatLang(frame_value[0], currency_obj=res_company.currency_id)"/>
                                 </t>
-                                <t t-if="frame_value[1]">
-                                    <span t-esc="formatLang(frame_value[0])" t-attf-style="color: {{ frame_value[1] }}"/>
+                                <t t-if="frame_value[1] and frame_value[0] != 0.0">
+                                    <span t-esc="formatLang(frame_value[0], currency_obj=res_company.currency_id)" t-attf-style="color: {{ frame_value[1] }}"/>
                                 </t>
                             </td>
                         </tr>
@@ -61,7 +61,7 @@
                             <td colspan="3"></td>
                             <td><strong>Sub-Total :</strong></td>
                             <td class="text-center" t-foreach="timeframe_headers" t-as="frame_header">
-                                <span t-esc="formatLang(timeframe_subtotals[frame_header[0]])"/>
+                                <span t-esc="formatLang(timeframe_subtotals[frame_header[0]], currency_obj=res_company.currency_id)"/>
                             </td>
                         </tr>
                     </table>
