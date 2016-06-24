@@ -32,7 +32,7 @@ class overdue_timeframe_parser(report_sxw.rml_parse):
             'timeframe_headers': [(frame.name, frame.color) for frame in timeframes],
             'invoice_timeframes': self._get_invoice_timeframes,
             'timeframe_subtotals': self.timeframe_subtotals,
-            'invoices_total': sum([inv.amount_total for inv in invoices])
+            'invoices_total': sum([inv.residual for inv in invoices])
 
         })
         self.context = context
@@ -50,9 +50,9 @@ class overdue_timeframe_parser(report_sxw.rml_parse):
                 date_diff = current_date - date_invoice
                 if frame.until_day:
                     if frame.before_day <= date_diff.days <= frame.until_day:
-                        frame_value = invoice.amount_total
+                        frame_value = invoice.residual
                 elif frame.before_day < date_diff.days:
-                    frame_value = invoice.amount_total
+                    frame_value = invoice.residual
             frame_color = False
             if date_due and frame.color and date_due < current_date:
                 frame_color = frame.color
