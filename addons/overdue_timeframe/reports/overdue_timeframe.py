@@ -51,7 +51,7 @@ class overdue_timeframe_parser(report_sxw.rml_parse):
                 if frame.until_day:
                     if frame.before_day <= date_diff.days <= frame.until_day:
                         frame_value = invoice.residual
-                elif frame.before_day < date_diff.days:
+                elif frame.before_day <= date_diff.days:
                     frame_value = invoice.residual
             frame_color = False
             if date_due and frame.color and date_due < current_date:
