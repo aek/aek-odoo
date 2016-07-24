@@ -11,7 +11,8 @@
     """,
     "data": [
         'views/overdue_timeframe_report.xml',
-        'views/overdue_timeframe_views.xml'
+        'views/overdue_timeframe_views.xml',
+        'security/ir.model.access.csv',
     ],
     'installable': True,
     'auto_install': False,
