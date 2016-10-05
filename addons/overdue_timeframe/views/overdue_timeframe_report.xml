@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <template id="report_overdue_timeframe_document">
+            <t t-call="report.external_layout">
+                <div class="page">
+                    <div class="row">
+                        <div class="col-xs-5 col-xs-offset-7">
+                            <span t-field="o.name"/><br/>
+                            <span t-raw="o._address_display(None, None)[o.id].replace('\n\n', '\n').replace('\n', '&lt;br&gt;')"/>
+                            <span t-field="o.vat"/>
+                        </div>
+                    </div>
+
+                    <p>
+                        Document: Customer account statement<br/>
+                        Date: <span t-esc="formatLang(time.strftime('%Y-%m-%d'), date=True)"/><br/>
+                        Customer ref: <span t-field="o.ref"/>
+                    </p>
+
+                    <p t-if="invoices">
+                        <span t-field="res_company.overdue_msg"/>
+                    </p>
+
+                    <table class="table table-condensed" t-if="invoices">
+                        <thead>
+                            <tr>
+                                <th>DATE</th>
+                                <th>INVOICE NUMBER</th>
+                                <th class="text-center">REFERENCE</th>
+                                <th class="text-center">DUE DATE</th>
+                                <t t-foreach="timeframe_headers" t-as="frame_header">
+                                    <th class="text-center" t-esc="frame_header[0]"/>
+                                </t>
+                            </tr>
+                        </thead>
+                        <tr t-foreach="invoices" t-as="invoice">
+                            <td>
+                                <span t-field="invoice.date_invoice"/>
+                            </td>
+                            <td>
+                                <span t-field="invoice.number"/>
+                            </td>
+                            <td>
+                                <span t-field="invoice.name"/>
+                            </td>
+                            <td>
+                                <span t-field="invoice.date_due"/>
+                            </td>
+                            <td class="text-center" t-foreach="invoice_timeframes(invoice)" t-as="frame_value">
+                                <t t-if="frame_value[1] == False or frame_value[0] == 0.0">
+                                    <span t-esc="formatLang(frame_value[0], currency_obj=res_company.currency_id)"/>
+                                </t>
+                                <t t-if="frame_value[1] and frame_value[0] != 0.0">
+                                    <span t-esc="formatLang(frame_value[0], currency_obj=res_company.currency_id)" t-attf-style="color: {{ frame_value[1] }}"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td><strong>Sub-Total :</strong></td>
+                            <td class="text-center" t-foreach="timeframe_headers" t-as="frame_header">
+                                <span t-esc="formatLang(timeframe_subtotals[frame_header[0]], currency_obj=res_company.currency_id)"/>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p t-if="invoices">
+                        <strong>Total amount due:</strong>
+                        <span t-esc="formatLang(invoices_total, currency_obj=res_company.currency_id)"/>
+                    </p>
+
+                    <p t-if="not invoices">
+                        <strong>There is nothing due with this customer.</strong>
+                    </p>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_overdue_timeframe">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="overdue_timeframe.report_overdue_timeframe_document" t-lang="o.lang"/>
+                </t>
+            </t>
+        </template>
+
+        <report id="overdue_timeframe_report"
+                string="Customer Statements"
+                model="res.partner"
+                report_type="qweb-pdf"
+                file="Customer_Statements"
+                name="overdue_timeframe.report_overdue_timeframe"/>
+
+    </data>
+</openerp>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="overdue_timeframe_form_view" model="ir.ui.view">
+            <field name="name">Overdue Timeframe</field>
+            <field name="model">overdue.timeframe</field>
+            <field name="arch" type="xml">
+                <form string="Overdue Timeframe">
+                    <group>
+                        <field name="name"/>
+                        <field name="before_day"/>
+                        <field name="until_day"/>
+                        <field name="color"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="overdue_timeframe_tree_view" model="ir.ui.view">
+            <field name="name">Overdue Timeframes</field>
+            <field name="model">overdue.timeframe</field>
+            <field name="arch" type="xml">
+                <tree string="Overdue Timeframes">
+                    <field name="name"/>
+                    <field name="before_day"/>
+                    <field name="until_day"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="overdue_timeframe_action" model="ir.actions.act_window">
+            <field name="name">Overdue Timeframes</field>
+            <field name="res_model">overdue.timeframe</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Overdue Timeframes" id="overdue_timeframe_menu" parent="base.menu_sale_config" action="overdue_timeframe_action"/>
+    </data>
+</openerp>

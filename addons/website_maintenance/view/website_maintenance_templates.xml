@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="website_maintenance_assets_backend" name="website_maintenance_assets_backend" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script src="/website_maintenance/static/src/js/maintenance.js" type="text/javascript"></script>
+            </xpath>
+        </template>
+
+        <template id="maintenance_message">
+            <html>
+                <head>
+                    <title t-esc="status_message">Service Unavailable</title>
+                    <link href='//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic' rel='stylesheet' type='text/css' />
+                    <link href='/website_maintenance/static/src/css/maintenance.css' rel='stylesheet' type='text/css' />
+                </head>
+                <body>
+                    <div id="maintenance_error">
+                        <div class="message">
+                            <img src='/logo.png'/>
+                            <h2><t t-esc="status_code"/>: <t t-esc="status_message"/></h2>
+                            <p>
+                                <t t-esc="status_message"/>
+                            </p>
+                            <p t-if="company_email">
+                                <a class="button" t-attf-href="mailto:{{company_email}}">Contact us</a>
+                            </p>
+                            <p class="note">
+                                If you have any question or remark please contact us at <a t-attf-href="mailto:{{company_email}}"><t t-esc="company_email" /></a>.
+                            </p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        </template>
+
+    </data>
+</openerp>
