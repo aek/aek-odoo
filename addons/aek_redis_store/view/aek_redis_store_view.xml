@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record id="aek_redis_store_form_view" model="ir.ui.view">
+            <field name="name">aek.redis.store.form</field>
+            <field name="model">aek.redis.store</field>
+            <field name="arch" type="xml">
+                <form string="Redis Profile" version="7.0">
+                	<header>
+                    	<button name="ping_service" string="Ping service" type="object" icon="gtk-go-forward"/>
+                    </header>
+                    <sheet layout="auto">
+	                	<group colspan="6">
+	                		<field name="name"/>
+	                		<field name="host"/>
+	                		<field name="port"/>
+	                		<field name="dbindex"/>
+	                		<field name="password" password="1"/>
+	                	</group>
+	                	<group colspan="6">
+	                		<field name="value_ids">
+	                			<form string="Redis Key-Value">
+	                				<group colspan="6">
+		                				<field name="name"/>
+		                				<field name="onlyread"/>
+		                				<field name="value"/>
+		                				<field name="real_value" readonly='1'/>
+		                			</group>
+	                			</form>
+	                			<tree string="Redis Key-Value">
+	                				<field name="name"/>
+	                				<field name="value"/>
+	                				<field name="real_value" readonly='1'/>
+	                			</tree>
+	                		</field>
+	                	</group>
+	                </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="aek_redis_store_tree_view" model="ir.ui.view">
+            <field name="name">aek.redis.store.model.tree</field>
+            <field name="model">aek.redis.store</field>
+            <field name="arch" type="xml">
+                <tree string="Redis Profiles" version="7.0">
+               		<field name="name"/>
+               		<field name="host"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="aek_redis_store_action" model="ir.actions.act_window">
+            <field name="name">Redis Profiles</field>
+            <field name="res_model">aek.redis.store</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+       	<menuitem name="Service Connection" id="aek_redis_store_profile_menu" parent="base.menu_administration" sequence="5"/>
+       		<menuitem name="Redis Profiles" id="aek_redis_store_profile_submenu" parent="aek_redis_store_profile_menu" action="aek_redis_store_action" sequence="1"/>
+        	
+	</data>
+</openerp>
