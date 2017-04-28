@@ -62,6 +62,7 @@ odoo.define('web_linkedin', function (require) {
             IN = false;
             var dialog = new Dialog(this, {
                 title: _t("LinkedIn is not enabled"),
+                $content: error?error.message:'',
                 buttons: [
                     {text: _t("Ok"), close: true}
                 ],
@@ -155,7 +156,7 @@ odoo.define('web_linkedin', function (require) {
         },
         initialize_content: function() {
             this._super();
-            this.$el.click(_.bind(this.search_linkedin, this));
+            $(this.$el[0]).click(_.bind(this.search_linkedin, this));
         },
         search_linkedin: function() {
             var self = this;
