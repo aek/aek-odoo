@@ -156,7 +156,10 @@ odoo.define('web_linkedin', function (require) {
         },
         initialize_content: function() {
             this._super();
-            $(this.$el[0]).click(_.bind(this.search_linkedin, this));
+            if(this.$el.length == 3){
+                this.$input = $(this.$el[2]);
+                $(this.$el[0]).click(_.bind(this.search_linkedin, this));
+            }
         },
         search_linkedin: function() {
             var self = this;
