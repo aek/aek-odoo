@@ -47,11 +47,6 @@ odoo.define('pos_receipt_dual_lang', function (require) {
     }
 
     translation.TranslationDataBase.include({
-        init: function() {
-            this._super();
-            this.swap_db = false;
-            this.swap_active = false;
-        },
         get: function(key) {
             if(this.swap_db && this.swap_active){
                 return this.swap_db[key];
@@ -70,6 +65,8 @@ odoo.define('pos_receipt_dual_lang', function (require) {
             this.swap_db = ret;
         }
     });
+    _t.database.swap_db = false;
+    _t.database.swap_active = false;
 
     var _t_dual = false;
     session.on('module_loaded', this, function () {
