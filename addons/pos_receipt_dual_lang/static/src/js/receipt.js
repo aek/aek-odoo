@@ -8,44 +8,6 @@ odoo.define('pos_receipt_dual_lang', function (require) {
     var translation = require('web.translation');
     var screens = require('point_of_sale.screens');
 
-    QWeb.preprocess_node = function() {
-        // Note that 'this' is the Qweb Node
-        switch (this.node.nodeType) {
-            case Node.TEXT_NODE:
-            case Node.CDATA_SECTION_NODE:
-                // Text and CDATAs
-                var translation = this.node.parentNode.attributes['t-translation'];
-                if (translation && translation.value === 'off') {
-                    return;
-                }
-                var match = /^(\s*)([\s\S]+?)(\s*)$/.exec(this.node.data);
-                if (match) {
-                    if(this.attributes['swap-lang']){
-                        _t.database.swap_active = true;
-                    }
-                    this.node.data = match[1] + _t(match[2]) + match[3];
-                    if(this.attributes['swap-lang']){
-                        _t.database.swap_active = false;
-                    }
-                }
-                break;
-            case Node.ELEMENT_NODE:
-                // Element
-                var attr, attrs = ['label', 'title', 'alt', 'placeholder'];
-                while ((attr = attrs.pop())) {
-                    if (this.attributes[attr]) {
-                        if(this.attributes['swap-lang']){
-                            _t.database.swap_active = true;
-                        }
-                        this.attributes[attr] = _t(this.attributes[attr]);
-                        if(this.attributes['swap-lang']){
-                            _t.database.swap_active = false;
-                        }
-                    }
-                }
-        }
-    }
-
     translation.TranslationDataBase.include({
         get: function(key) {
             if(this.swap_db && this.swap_active){
@@ -94,7 +56,6 @@ odoo.define('pos_receipt_dual_lang', function (require) {
                 _t_dual: _t_dual,
                 _t_orig_db: _t.database,
             };
-            Qweb.compile_template
             this.$('.pos-receipt-container').html(QWeb.render('PosTicket', receipt_data));
         }
     })
