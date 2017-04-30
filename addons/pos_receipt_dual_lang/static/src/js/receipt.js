@@ -22,7 +22,11 @@ odoo.define('pos_receipt_dual_lang', function (require) {
         swap: function(swap_db){
             var ret = {};
             for(var key in swap_db){
-                ret[this.db[key]] = swap_db[key];
+                if(this.db[key]){
+                    ret[this.db[key]] = swap_db[key];
+                } else {
+                    ret[key] = swap_db[key];
+                }
             }
             this.swap_db = ret;
         }
