@@ -207,7 +207,7 @@
                     <t t-esc="receipt.footer" />
                 </div>
                 <t t-if="_t_dual">
-                    <t t-set="_t_orig_db.swap_active" t-value="true"/>
+                    <t t-swap_active="true"/>
                     <br />
                     <div style='text-align:center'>
                         <t t-esc="receipt.footer"/>
