@@ -76,7 +76,7 @@ odoo.define('pos_receipt_dual_lang', function (require) {
         new Model("ir.config_parameter").call("get_param", ["pos_receipt_dual_lang"]).then(function(dual_lang) {
             if (!!dual_lang) {
                 _t_dual = new translation.TranslationDataBase().build_translation_function();
-                self.rpc('/pos/translations', {mods: null, lang: dual_lang}).then(function(trans) {
+                session.rpc('/pos/translations', {mods: null, lang: dual_lang}).then(function(trans) {
                     _t_dual.database.set_bundle(trans);
                     translation._t.database.swap(_t_dual.database.db);
                 });
