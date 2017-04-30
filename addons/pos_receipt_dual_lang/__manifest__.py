@@ -8,6 +8,7 @@
         'assets.xml',
     ],
     'depends' : ['point_of_sale'],
+    'qweb': ['static/src/xml/pos.xml'],
     'installable': True,
     'auto_install': False,
 }
