@@ -9,7 +9,7 @@ odoo.define('pos_receipt_dual_lang', function (require) {
     var screens = require('point_of_sale.screens');
 
     QWeb.actions_precedence.push('swap_active')
-    swap_active.compile_action_swap_active = function (value) {
+    QWeb.compile_action_swap_active = function (value) {
         _t.database.swap_active = value;
     }
 
