@@ -6,18 +6,27 @@
             
             <div class="pos-center-align"><t t-esc="moment().format('L LT')"/> <t t-esc="order.name"/></div>
             <t t-if="_t_dual">
-            <div class="pos-center-align"><t t-esc="moment().format('L LT')"/> <t t-esc="order.name" swap-lang="true"/></div>
+                <t t-set="_t_orig_db.swap_active" t-value="true"/>
+            <div class="pos-center-align"><t t-esc="moment().format('L LT')"/> <t t-esc="order.name"/></div>
+                <t t-set="_t_orig_db.swap_active" t-value="true"/>
             </t>
             <br />
             <t t-esc="widget.pos.company.name"/><br />
-            <t t-esc="widget.pos.company.name" t-if="_t_dual" swap-lang="true"/><br />
+            <t t-if="_t_dual">
+                <t t-set="_t_orig_db.swap_active" t-value="true"/>
+                <t t-esc="widget.pos.company.name"/><br />
+            </t>
             Phone: <t t-esc="widget.pos.company.phone || ''"/><br />
-            <t t-if="_t_dual" swap-lang="true">
-            Phone: <t t-esc="widget.pos.company.phone || ''" swap-lang="true"/><br />
+            <t t-if="_t_dual">
+                <t t-set="_t_orig_db.swap_active" t-value="true"/>
+                Phone: <t t-esc="widget.pos.company.phone || ''"/><br />
+                <t t-set="_t_orig_db.swap_active" t-value="false"/>
             </t>
             User: <t t-esc="widget.pos.cashier ? widget.pos.cashier.name : widget.pos.user.name"/><br />
-            <t t-if="_t_dual" swap-lang="true">
-            User: <t t-esc="widget.pos.cashier ? widget.pos.cashier.name : widget.pos.user.name" t-if="_t_dual" swap-lang="true"/><br />
+            <t t-if="_t_dual">
+                <t t-set="_t_orig_db.swap_active" t-value="true"/>
+                User: <t t-esc="widget.pos.cashier ? widget.pos.cashier.name : widget.pos.user.name" t-if="_t_dual" swap-lang="true"/><br />
+                <t t-set="_t_orig_db.swap_active" t-value="false"/>
             </t>
             <br />
             <t t-if="receipt.header">
@@ -25,7 +34,11 @@
                     <t t-esc="receipt.header" />
                 </div>
                 <div style='text-align:center'>
-                    <t t-esc="receipt.header" t-if="_t_dual" swap-lang="true"/>
+                    <t t-if="_t_dual">
+                        <t t-set="_t_orig_db.swap_active" t-value="true"/>
+                            <t t-esc="receipt.header"/>
+                        <t t-set="_t_orig_db.swap_active" t-value="false"/>
+                    </t>
                 </div>
                 <br />
             </t>
@@ -52,22 +65,27 @@
                             <t t-esc="widget.format_currency(orderline.get_display_price())"/>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <t t-esc="orderline.get_product().display_name" t-if="_t_dual" swap-lang="true"/>
-                             <t t-if="orderline.get_discount() > 0">
-                                <div class="pos-disc-font" t-if="_t_dual" swap-lang="true">
-                                    With a <t t-esc="orderline.get_discount()" t-if="_t_dual" swap-lang="true"/>% discount
-                                </div>
-                            </t>
-                        </td>
-                        <td class="pos-right-align">
-                            <t t-esc="orderline.get_quantity_str_with_unit()" t-if="_t_dual" swap-lang="true"/>
-                        </td>
-                        <td class="pos-right-align">
-                            <t t-esc="widget.format_currency(orderline.get_display_price())" t-if="_t_dual" swap-lang="true"/>
-                        </td>
-                    </tr>
+                    <t t-if="_t_dual">
+                        <t t-set="_t_orig_db.swap_active" t-value="true"/>
+                        <tr>
+                            <td>
+                                <t t-esc="orderline.get_product().display_name"/>
+                                <t t-if="orderline.get_discount() > 0">
+                                    <div class="pos-disc-font">
+                                        With a <t t-esc="orderline.get_discount()"/>% discount
+                                    </div>
+                                </t>
+                            </td>
+                            <td class="pos-right-align">
+                                <t t-esc="orderline.get_quantity_str_with_unit()"/>
+                                <t t-set="_t_orig_db.swap_active" t-value="false"/>
+                            </td>
+                            <td class="pos-right-align">
+                                <t t-esc="widget.format_currency(orderline.get_display_price())"/>
+                            </td>
+                        </tr>
+                        <t t-set="_t_orig_db.swap_active" t-value="false"/>
+                    </t>
                 </t>
             </table>
             <br />
@@ -78,12 +96,16 @@
                         <t t-esc="widget.format_currency(order.get_total_without_tax())"/>
                     </td>
                 </tr>
-                <tr>
-                    <td t-if="_t_dual" swap-lang="true">Subtotal:</td>
-                    <td class="pos-right-align">
-                        <t t-esc="widget.format_currency(order.get_total_without_tax())" t-if="_t_dual" swap-lang="true"/>
-                    </td>
-                </tr>
+                <t t-if="_t_dual">
+                    <t t-set="_t_orig_db.swap_active" t-value="true"/>
+                    <tr>
+                        <td>Subtotal:</td>
+                        <td class="pos-right-align">
+                            <t t-esc="widget.format_currency(order.get_total_without_tax())"/>
+                        </td>
+                    </tr>
+                    <t t-set="_t_orig_db.swap_active" t-value="false"/>
+                </t>
                 <t t-foreach="order.get_tax_details()" t-as="taxdetail">
                     <tr>
                         <td><t t-esc="taxdetail.name" /></td>
@@ -91,12 +113,16 @@
                             <t t-esc="widget.format_currency(taxdetail.amount)" />
                         </td>
                     </tr>
-                    <tr>
-                        <td><t t-esc="taxdetail.name" t-if="_t_dual" swap-lang="true"/></td>
-                        <td class="pos-right-align">
-                            <t t-esc="widget.format_currency(taxdetail.amount)" t-if="_t_dual" swap-lang="true"/>
-                        </td>
-                    </tr>
+                    <t t-if="_t_dual">
+                        <t t-set="_t_orig_db.swap_active" t-value="true"/>
+                        <tr>
+                            <td><t t-esc="taxdetail.name"/></td>
+                            <td class="pos-right-align">
+                                <t t-esc="widget.format_currency(taxdetail.amount)"/>
+                            </td>
+                        </tr>
+                        <t t-set="_t_orig_db.swap_active" t-value="false"/>
+                    </t>
                 </t>
                 <tr>
                     <td>Discount:</td>
@@ -104,24 +130,32 @@
                         <t t-esc="widget.format_currency(order.get_total_discount())"/>
                     </td>
                 </tr>
-                <tr>
-                    <td t-if="_t_dual" swap-lang="true">Discount:</td>
-                    <td class="pos-right-align">
-                        <t t-esc="widget.format_currency(order.get_total_discount())" t-if="_t_dual" swap-lang="true"/>
-                    </td>
-                </tr>
+                <t t-if="_t_dual">
+                    <t t-set="_t_orig_db.swap_active" t-value="true"/>
+                    <tr>
+                        <td>Discount:</td>
+                        <td class="pos-right-align">
+                            <t t-esc="widget.format_currency(order.get_total_discount())"/>
+                        </td>
+                    </tr>
+                    <t t-set="_t_orig_db.swap_active" t-value="false"/>
+                </t>
                 <tr class="emph">
                     <td>Total:</td>
                     <td class="pos-right-align">
                         <t t-esc="widget.format_currency(order.get_total_with_tax())"/>
                     </td>
                 </tr>
-                <tr class="emph">
-                    <td t-if="_t_dual" swap-lang="true">Total:</td>
-                    <td class="pos-right-align">
-                        <t t-esc="widget.format_currency(order.get_total_with_tax())" t-if="_t_dual" swap-lang="true"/>
-                    </td>
-                </tr>
+                <t t-if="_t_dual">
+                    <t t-set="_t_orig_db.swap_active" t-value="true"/>
+                    <tr class="emph">
+                        <td>Total:</td>
+                        <td class="pos-right-align">
+                            <t t-esc="widget.format_currency(order.get_total_with_tax())"/>
+                        </td>
+                    </tr>
+                    <t t-set="_t_orig_db.swap_active" t-value="false"/>
+                </t>
             </table>
             <br />
             <table class='receipt-paymentlines'>
@@ -134,14 +168,18 @@
                             <t t-esc="widget.format_currency(line.get_amount())"/>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <t t-esc="line.name" t-if="_t_dual" swap-lang="true"/>
-                        </td>
-                        <td class="pos-right-align">
-                            <t t-esc="widget.format_currency(line.get_amount())" t-if="_t_dual" swap-lang="true"/>
-                        </td>
-                    </tr>
+                    <t t-if="_t_dual">
+                        <t t-set="_t_orig_db.swap_active" t-value="true"/>
+                        <tr>
+                            <td>
+                                <t t-esc="line.name"/>
+                            </td>
+                            <td class="pos-right-align">
+                                <t t-esc="widget.format_currency(line.get_amount())"/>
+                            </td>
+                        </tr>
+                        <t t-set="_t_orig_db.swap_active" t-value="false"/>
+                    </t>
                 </t>
             </table>
             <br />
@@ -152,22 +190,30 @@
                         <t t-esc="widget.format_currency(order.get_change())"/>
                     </td>
                 </tr>
-                <tr>
-                    <td t-if="_t_dual" swap-lang="true">Change:</td>
-                    <td class="pos-right-align">
-                        <t t-esc="widget.format_currency(order.get_change())" t-if="_t_dual" swap-lang="true"/>
-                    </td>
-                </tr>
+                <t t-if="_t_dual">
+                    <t t-set="_t_orig_db.swap_active" t-value="true"/>
+                    <tr>
+                        <td>Change:</td>
+                        <td class="pos-right-align">
+                            <t t-esc="widget.format_currency(order.get_change())"/>
+                        </td>
+                    </tr>
+                    <t t-set="_t_orig_db.swap_active" t-value="false"/>
+                </t>
             </table>
             <t t-if="receipt.footer">
                 <br />
                 <div style='text-align:center'>
                     <t t-esc="receipt.footer" />
                 </div>
-                <br />
-                <div style='text-align:center'>
-                    <t t-esc="receipt.footer" t-if="_t_dual" swap-lang="true"/>
-                </div>
+                <t t-if="_t_dual">
+                    <t t-set="_t_orig_db.swap_active" t-value="true"/>
+                    <br />
+                    <div style='text-align:center'>
+                        <t t-esc="receipt.footer"/>
+                    </div>
+                    <t t-set="_t_orig_db.swap_active" t-value="false"/>
+                </t>
             </t>
         </div>
     </t>

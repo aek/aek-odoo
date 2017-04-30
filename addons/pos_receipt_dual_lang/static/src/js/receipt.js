@@ -92,7 +92,9 @@ odoo.define('pos_receipt_dual_lang', function (require) {
                 orderlines: order.get_orderlines(),
                 paymentlines: order.get_paymentlines(),
                 _t_dual: _t_dual,
+                _t_orig_db: _t.database,
             };
+            Qweb.compile_template
             this.$('.pos-receipt-container').html(QWeb.render('PosTicket', receipt_data));
         }
     })
