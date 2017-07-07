@@ -1,0 +1,25 @@
+{
+  "name": "print.js",
+  "homepage": "http://printjs.crabbly.com",
+  "description": "A tiny javascript library to help printing from the web.",
+  "version": "1.0.12",
+  "main": "src/print.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crabbly/Print.js"
+  },
+  "license": "MIT",
+  "dependences": {},
+  "devDependencies": {
+    "gulp": "3.9.x",
+    "laravel-elixir": "^6.0.0-10",
+    "laravel-elixir-webpack-official": "^1.0.10",
+    "standard": "^7.1.2"
+  },
+  "scripts": {
+    "test": "standard"
+  },
+  "spm": {
+    "main": "Print.js"
+  }
+}
