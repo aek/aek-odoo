@@ -1,9 +1,9 @@
 openerp.aek_browser_pdf = function (instance) {
 
     instance.web.aek_browser_pdf = function(element, action) {
-        var ids = Array.isArray(action.params.ids) ? action.params.ids : [action.params.ids];
+        var ids = action.context.active_ids;
         new instance.web.Model('report').call('get_action_html', [
-            ids, action.params.report_name, action.params.data, action.params.context
+            ids, action.report_name, action.data, action.context
         ]).then(function(res) {
             var paper_format = res.paper_format;
             printJS({printable_html:res.content, type:'html'});

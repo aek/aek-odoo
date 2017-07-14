@@ -11,12 +11,9 @@ class sale_order(models.Model):
         return {
             'type': 'ir.actions.client',
             'tag': 'aek_browser_pdf',
-            'params': {
-                'report_name': 'sale.report_saleorder',
-                'ids': self.ids,
-                'datas': datas,
-                'context': {'lang': 'es_ES'}
-            }
+            'report_name': 'sale.report_saleorder',
+            'datas': datas,
+            'context': self.env.context
         }
 ```
 Define a button in the form like this:
