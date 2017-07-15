@@ -13,51 +13,17 @@ class Report(models.Model):
         qwebtypes = ['qweb-pdf', 'qweb-html']
         conditions = [('report_type', 'in', qwebtypes), ('report_name', '=', report_name)]
         report = self.env['ir.actions.report.xml'].search(conditions)[0]
-        user = self.env.user
-        context = dict(self.env.context)
-        context['debug'] = False
 
         if not report.paperformat_id:
-            paperformat = user.company_id.paperformat_id
+            paperformat = self.env.user.company_id.paperformat_id
         else:
             paperformat = report.paperformat_id
 
-        html = self.get_html(docids, report_name, data=data)
+        html = self.with_context(debug=False, paperformat=paperformat).get_html(docids, report_name, data=data)
         html = html.decode('utf-8')  # Ensure the current document is utf-8 encoded.
-        root = lxml.html.fromstring(html)
-        match_klass = "//div[contains(concat(' ', normalize-space(@class), ' '), ' {} ')]"
-
-        css = ''  # Will contain local css
-        headerhtml = []
-        contenthtml = []
-        footerhtml = []
-        base_url = self.env['ir.config_parameter'].sudo().get_param('report.url') or self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-
-        for node in root.xpath("//html/head/style"):
-            css += node.text
-
-        view_obj = self.env['ir.ui.view']
-        render_minimal = partial(view_obj.with_context(context).render_template, 'report.minimal_layout')
-
-        for node in root.xpath(match_klass.format('header')):
-            body = lxml.html.tostring(node)
-            header = render_minimal(dict(css=css, subst=False, body=body, base_url=base_url))
-            headerhtml.append(header)
-
-        for node in root.xpath(match_klass.format('footer')):
-            body = lxml.html.tostring(node)
-            footer = render_minimal(dict(css=css, subst=False, body=body, base_url=base_url))
-            footerhtml.append(footer)
-
-        for node in root.xpath(match_klass.format('page')):
-            body = lxml.html.tostring(node)
-            reportcontent = render_minimal(dict(css=css, subst=False, body=body, base_url=base_url))
-            contenthtml.append(reportcontent)
 
         return {
-            'headers': "".join(headerhtml),
             'content': html,
-            'footers': "".join(footerhtml),
             'paper_format': self.get_paper_format(paperformat)
         }
 
