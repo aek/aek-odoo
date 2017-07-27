@@ -19,40 +19,65 @@ class Report(models.Model):
         else:
             paperformat = report.paperformat_id
 
-        html = self.with_context(debug=False, paperformat=paperformat).get_html(docids, report_name, data=data)
+        html = self.with_context(debug=False, paperformat=self.get_paper_format(paperformat)).get_html(docids, report_name, data=data)
         html = html.decode('utf-8')  # Ensure the current document is utf-8 encoded.
 
         return {
             'content': html,
-            'paper_format': self.get_paper_format(paperformat)
         }
 
     def get_paper_format(self, paperformat):
         res = {}
         if paperformat.format and paperformat.format != 'custom':
-            res['page_size'] = paperformat.format
+            res['page-size'] = paperformat.format
 
         if paperformat.page_height and paperformat.page_width and paperformat.format == 'custom':
-            res['page_width'] = paperformat.page_width
-            res['page_height'] = paperformat.page_height
+            res['page-size'] = '%smm %smm' %(paperformat.page_width, paperformat.page_height)
 
         res['margin-top'] = paperformat.margin_top
-
-        if paperformat.dpi:
-            if os.name == 'nt' and int(paperformat.dpi) <= 95:
-                res['dpi'] = '96'
-            else:
-                res['dpi'] = paperformat.dpi
-
-        if paperformat.header_spacing:
-            res['header-spacing'] = paperformat.header_spacing
-
         res['margin-left'] = paperformat.margin_left
         res['margin-bottom'] = paperformat.margin_bottom
         res['margin-right'] = paperformat.margin_right
-        if paperformat.orientation:
-            res['orientation'] = paperformat.orientation
-        if paperformat.header_line:
-            res['header-line'] = True
+        res['dpi'] = paperformat.dpi
+        res['header-spacing'] = paperformat.header_spacing
+        res['orientation'] = paperformat.orientation or ''
+        res['header-line'] = paperformat.header_line
 
         return res
+
+class IrUiView(models.Model):
+    _inherit = 'ir.ui.view'
+
+    @api.multi
+    def render(self, values=None, engine='ir.qweb'):
+        if not values:
+            values = {}
+        if engine == 'ir.qweb':
+            values['paperformat'] = self.env.context.get('paperformat', False)
+        return super(IrUiView, self).render(values=values, engine=engine)
+
+
+class sale_order(models.Model):
+    _inherit = 'sale.order'
+
+    # @api.multi
+    # def test_action_browser_pdf(self):
+        # datas = {'ids': self.ids}
+        # return {
+        #     'type': 'ir.actions.client',
+        #     'tag': 'aek_browser_pdf',
+        #     'report_name': 'sale.report_saleorder',
+        #     'datas': datas,
+        #     'context': self.env.context
+        # }
+
+    @api.multi
+    def test_action_browser_pdf(self):
+        datas = {'ids': self.ids}
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_type': 'controller',
+            'report_name': 'test',
+            'report_file': '/web/content/ir.attachment/444/datas/visa_unidad_familiar.docx?download=true',
+            'display_name': 'test',
+        }

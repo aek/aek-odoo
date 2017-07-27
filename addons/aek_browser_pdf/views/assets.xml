@@ -9,5 +9,28 @@
                 <script type="text/javascript" src="/aek_browser_pdf/static/src/js/browser_pdf.js"></script>
             </xpath>
         </template>
+
+        <template id="assets_common" name="aek_browser_pdf assets" inherit_id="report.layout">
+            <meta name="viewport" position="after">
+<style t-if="paperformat">
+@media print (min-resolution: <t t-raw="paperformat['dpi']"/>dpi) {
+
+}
+@page {
+    size: <t t-raw="paperformat['page-size']"/> <t t-raw="paperformat['orientation']"/>;
+    margin-left: <t t-raw="paperformat['margin-left']"/>mm;
+    margin-right: <t t-raw="paperformat['margin-right']"/>mm;
+    margin-top: <t t-raw="paperformat['margin-top']"/>mm;
+    margin-bottom: <t t-raw="paperformat['margin-bottom']"/>mm;
+    @top-center {
+        content: "axelllll"
+    }
+    @bottom-center {
+        content: "axelllll footer"
+    }
+}
+</style>
+            </meta>
+        </template>
     </data>
 </openerp>

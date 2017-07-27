@@ -13,7 +13,7 @@ odoo.define('aek_browser_pdf', function (require) {
     };
     core.action_registry.add('aek_browser_pdf', aek_browser_pdf);
 
-    /*
+
     var ReportAction = require('report.client_action');
 
     ReportAction.include({
@@ -31,5 +31,5 @@ odoo.define('aek_browser_pdf', function (require) {
             };
             return this.do_action(action);
         },
-    });*/
+    });
 });

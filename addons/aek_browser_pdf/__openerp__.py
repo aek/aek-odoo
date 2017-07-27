@@ -6,7 +6,7 @@
     'description': """This module allow you to generate PDF from the HTML version of the QWEB Report.""",
     'author': 'aekroft@gmail.com',
     'website': 'https://aekroft.com',
-    'depends': ['base', 'web', 'report'],
+    'depends': ['base', 'web', 'report', 'sale', 'report'],
     'data': [
         'views/assets.xml',
     ],
