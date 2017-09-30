@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_website_config_settings" model="ir.ui.view">
+            <field name="name">Website settings</field>
+            <field name="model">website.config.settings</field>
+            <field name="inherit_id" ref="website.view_website_config_settings"/>
+            <field name="arch" type="xml">
+                <data>
+                    <div name="google_analytics_key" position="after">
+                        <label for="facebook_pixel_key"/>
+                        <div>
+                            <div>
+                                <div name="facebook_pixel_key" class="oe_inline">
+                                    <field name="facebook_pixel_key"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </data>
+            </field>
+        </record>
+
+        <record id="view_website_form" model="ir.ui.view">
+            <field name="name">website.form</field>
+            <field name="model">website</field>
+            <field name="inherit_id" ref="website.view_website_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="google_analytics_key" position="after">
+                        <field name="facebook_pixel_key"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <template id="assets_frontend" inherit_id="website.assets_frontend" name="Facebook Pixel">
+          <xpath expr="." position="inside">
+              <script type="text/javascript" src="/facebook_pixel/static/src/js/pixel_tracker.js"></script>
+          </xpath>
+        </template>
+
+        <template id="facebook_pixel_src" inherit_id="website.layout" name="Facebook Pixel Tracker">
+            <xpath expr="//script[@id='tracking_code']" position="after">
+                <!-- Facebook Pixel Code -->
+                <script id='fb_tracking_code' t-if="website and website.facebook_pixel_key">
+                    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+                    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+                    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+                    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+                    fbq('init', '<t t-esc="website.facebook_pixel_key"/>'); // Insert your pixel ID here. 430913307269774
+                    fbq('track', 'PageView', {
+                        'title': document.title,
+                        'url': document.location.href,
+                    });
+                </script>
+                <noscript><img height="1" width="1" style="display:none" t-attf-src="https://www.facebook.com/tr?id={{ website.facebook_pixel_key }}&amp;ev=PageView&amp;noscript=1"/></noscript>
+                <!-- DO NOT MODIFY -->
+                <!-- End Facebook Pixel Code -->
+            </xpath>
+        </template>
+
+    </data>
+</openerp>
