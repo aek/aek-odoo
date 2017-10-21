@@ -65,7 +65,7 @@ class sale_order(models.Model):
         # datas = {'ids': self.ids}
         # return {
         #     'type': 'ir.actions.client',
-        #     'tag': 'aek_browser_pdf',
+        #     'tag': 'browser_pdf',
         #     'report_name': 'sale.report_saleorder',
         #     'datas': datas,
         #     'context': self.env.context

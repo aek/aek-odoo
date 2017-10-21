@@ -3,14 +3,14 @@
 -->
 <openerp>
     <data>
-        <template id="assets_backend" name="aek_browser_pdf assets" inherit_id="web.assets_backend">
+        <template id="assets_backend" name="browser_pdf assets" inherit_id="web.assets_backend">
             <xpath expr="." position="inside">
-                <script type="text/javascript" src="/aek_browser_pdf/static/lib/Print.js-1.0.13/dist/print.min.js"></script>
-                <script type="text/javascript" src="/aek_browser_pdf/static/src/js/browser_pdf.js"></script>
+                <script type="text/javascript" src="/browser_pdf/static/lib/Print.js-1.0.13/dist/print.min.js"></script>
+                <script type="text/javascript" src="/browser_pdf/static/src/js/browser_pdf.js"></script>
             </xpath>
         </template>
 
-        <template id="assets_common" name="aek_browser_pdf assets" inherit_id="report.layout">
+        <template id="assets_common" name="browser_pdf assets" inherit_id="report.layout">
             <meta name="viewport" position="after">
 <style t-if="paperformat">
 @media print (min-resolution: <t t-raw="paperformat['dpi']"/>dpi) {
