@@ -6,7 +6,7 @@
     'description': """This module Add an F5 button to update only the module.""",
     'author': 'aekroft@gmail.com',
     'website': 'https://sonetasot.com',
-    'depends': ['base', 'web', 'web_enterprise', 'website_enterprise', 'website_version'],
+    'depends': ['base', 'web', ],
     'data': [
         'ir_module_view.xml',
     ],
