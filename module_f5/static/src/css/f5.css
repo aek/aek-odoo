@@ -1,0 +1,7 @@
+.btn-f5 {
+    right: 75px !important;
+}
+
+.oe_form_field.o_form_field_many2manytags .oe_form_field.oe_form_field_many2one.oe_form_field_with_button {
+    position: static !important;
+}

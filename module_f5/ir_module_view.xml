@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <record id="view_module_form_inherit" model="ir.ui.view">
+            <field name="name">ir.module.module.form</field>
+            <field name="model">ir.module.module</field>
+            <field name="inherit_id" ref="base.module_form"/>
+            <field name="arch" type="xml">
+                <xpath expr='/form/sheet/div/div' position="inside" version="7.0">
+                    <button name="button_update_self" states="installed" string="F5" type="object" class="oe_highlight"/>
+                </xpath>
+            </field>
+		</record>
+
+        <record id="view_module_tree_inherit" model="ir.ui.view">
+            <field name="name">ir.module.module.tree</field>
+            <field name="model">ir.module.module</field>
+            <field name="inherit_id" ref="base.module_tree"/>
+            <field name="arch" type="xml">
+                <field name="state" position="after">
+                    <button name="button_update_self" states="installed" icon="gtk-fullscreen" string="F5" type="object"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="module_view_kanban_inherit">
+            <field name="name">Solt Modules Kanban</field>
+            <field name="model">ir.module.module</field>
+            <field name="inherit_id" ref="base.module_view_kanban"/>
+            <field name="arch" type="xml">
+                <button t-if="installed" disabled="disabled" position="after">
+                    <button type="object" name="button_update_self" states="installed" class="btn-f5 btn btn-primary pull-right btn-sm">F5</button>
+                </button>
+            </field>
+        </record>
+
+        <template id="assets_backend" name="f5 assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/module_f5/static/src/css/f5.css"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>
