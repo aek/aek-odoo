@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="assets_backend" name="js assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/fix_o2m_onchange/static/src/js/widget.js"></script>
+            </xpath>
+        </template>
+    </data>
+</openerp>
