@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Fix One-to-Many Onchange Order",
+    'name': "Fix One-to-Many Onchange",
     'summary': "",
     'description': """""",
     'author': "Axel Mendoza",
