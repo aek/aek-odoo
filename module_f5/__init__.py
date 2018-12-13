@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-import ir_module
+from . import ir_module

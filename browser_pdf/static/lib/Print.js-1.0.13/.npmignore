@@ -1,6 +1,0 @@
-.idea/
-/dist/*.zip
-
-
-.gitignore
-.travis.yml

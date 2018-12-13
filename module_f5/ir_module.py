@@ -82,18 +82,18 @@ class ir_module(models.Model):
                     models.append(model_name)
             # models = [self.env[m] for m in models]
 
+            registry.setup_models(self.env.cr)
             registry.init_models(self.env.cr, models, self.env.context)
-            registry.setup_models(self.env.cr, partial=True)
 
             package = odoo.modules.module.load_information_from_description_file(module['name'])
 
-            modobj = self.env['ir.module.module']
+            module_id = self.env['ir.module.module'].browse(module['id'])
 
-            modobj.browse(module['id']).check()
+            module_id._check()
 
             _load_data(self.env.cr, module['name'], idref, mode, kind='data')
             self.env['ir.ui.view']._validate_module_views(module['name'])
-            modobj.browse(module['id']).with_context(overwrite=True).update_translations(None)
+            module_id.with_context(overwrite=True)._update_translations()
         self.env['ir.ui.menu']._parent_store_compute()
         self.env.cr.commit()
         return True

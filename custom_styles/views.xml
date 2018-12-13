@@ -1,0 +1,49 @@
+<openerp>
+    <data>
+        <record id="custom_styles_tree" model="ir.ui.view">
+            <field name="name">Custom Styles Tree</field>
+            <field name="model">custom.styles</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="custom_styles_form" model="ir.ui.view">
+            <field name="name">Custom Styles Form</field>
+            <field name="model">custom.styles</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="mimetype"/>
+                            </group>
+                            <group>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                        <group string="Data">
+                            <field name="data" nolabel="1" widget="ace" options="{'mode': 'html'}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="custom_styles_action" model="ir.actions.act_window">
+            <field name="name">Custom Styles</field>
+            <field name="res_model">custom.styles</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem id="custom_styles_menu" action="custom_styles_action" parent="website.menu_website_global_configuration" sequence="10" />
+    </data>
+</openerp>

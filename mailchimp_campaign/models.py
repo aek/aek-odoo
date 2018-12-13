@@ -4,17 +4,12 @@ import json
 import requests
 import logging
 
-try:
-    import urlparse
-except ImportError:
-    from urllib import parse as urlparse
-
 from odoo import api, models, fields, _, exceptions
 
 _logger = logging.getLogger(__name__)
 
 
-class mailchimp_campaign(models.Model):
+class MailchimpCampaign(models.Model):
     _inherit = 'mail.mass_mailing'
     
     chimp_id = fields.Char('MailChimp ID')
@@ -139,7 +134,7 @@ class mailchimp_campaign(models.Model):
                     member.write({'chimp_id': resp.get('id'), 'chimp_data': response.text})
 
 
-class mailchimp_list_member(models.Model):
+class MailchimpListMember(models.Model):
     _name = 'mailchimp.list.member'
     
     name = fields.Char('Email')
@@ -150,13 +145,13 @@ class mailchimp_list_member(models.Model):
     chimp_data = fields.Text('MailChimp Data')
 
 
-class hr_employee(models.Model):
+class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
     _mail_mass_mailing = _('Employees')
 
 
-class res_partner(models.Model):
+class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     _mail_mass_mailing = _('Students')

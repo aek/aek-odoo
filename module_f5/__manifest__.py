@@ -5,8 +5,8 @@
     'category': 'web',
     'description': """This module Add an F5 button to update only the module.""",
     'author': 'aekroft@gmail.com',
-    'website': 'https://sonetasot.com',
-    'depends': ['base', 'web', ],
+    'website': 'https://www.aekroft.com',
+    'depends': ['base', 'web',],
     'data': [
         'ir_module_view.xml',
     ],
